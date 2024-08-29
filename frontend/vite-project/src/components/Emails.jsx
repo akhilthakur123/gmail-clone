@@ -11,19 +11,19 @@ const Emails = (props) => {
   useEffect(() => {
     const filteredEmail = emails.filter((email) => {
       return email.subject.toLowerCase()
-        // .includes(searchText.toLowerCase()) 
+         .includes(searchText.toLowerCase()) 
         || email.to.toLowerCase()
-        //.includes(searchText.toLowerCase())  
+        .includes(searchText.toLowerCase())  
         || email.message.toLowerCase()
-      //.includes(searchText.toLowerCase())
+      .includes(searchText.toLowerCase())
     });
     const filteredSentEmails = sentEmails.filter((email) => {
       return email.subject.toLowerCase()
-        // .includes(searchText.toLowerCase()) 
+         .includes(searchText.toLowerCase()) 
         || email.to.toLowerCase()
-        //.includes(searchText.toLowerCase())  
+        .includes(searchText.toLowerCase())  
         || email.message.toLowerCase()
-      //.includes(searchText.toLowerCase())
+      .includes(searchText.toLowerCase())
     })
     setFilterEmail(type === "inbox" ? filteredEmail : filteredSentEmails);
   }, [searchText, emails])
