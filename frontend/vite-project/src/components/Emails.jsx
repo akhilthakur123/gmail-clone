@@ -3,29 +3,37 @@ import Email from './Email'
 import useGetAllEmails from '../hooks/useGetAllEmails'
 import { useSelector } from 'react-redux';
 
-const Emails = () => {
-  useGetAllEmails();
-  const {emails, searchText} = useSelector(store=>store.app);
+const Emails = (props) => {
+  const { type } = props;
+  const { emails, searchText, sentEmails } = useSelector(store => store.app);
   const [filterEmail, setFilterEmail] = useState(emails);
 
-  useEffect(()=>{
-    const filteredEmail = emails.filter((email)=>{
+  useEffect(() => {
+    const filteredEmail = emails.filter((email) => {
       return email.subject.toLowerCase()
-     // .includes(searchText.toLowerCase()) 
-      || email.to.toLowerCase()
-      //.includes(searchText.toLowerCase())  
-     || email.message.toLowerCase()
+        // .includes(searchText.toLowerCase()) 
+        || email.to.toLowerCase()
+        //.includes(searchText.toLowerCase())  
+        || email.message.toLowerCase()
       //.includes(searchText.toLowerCase())
-    }); 
-    setFilterEmail(filteredEmail);
-  },[searchText, emails])
+    });
+    const filteredSentEmails = sentEmails.filter((email) => {
+      return email.subject.toLowerCase()
+        // .includes(searchText.toLowerCase()) 
+        || email.to.toLowerCase()
+        //.includes(searchText.toLowerCase())  
+        || email.message.toLowerCase()
+      //.includes(searchText.toLowerCase())
+    })
+    setFilterEmail(type === "inbox" ? filteredEmail : filteredSentEmails);
+  }, [searchText, emails])
 
   return (
     <div>
       {
-        filterEmail && filterEmail?.map((email)=> <Email key={email._id} email={email}/> )
+        filterEmail && filterEmail?.map((email) => <Email key={email._id} email={email} />)
       }
-        
+
     </div>
   )
 }
