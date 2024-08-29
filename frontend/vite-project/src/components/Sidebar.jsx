@@ -4,8 +4,8 @@ import { LuPencil } from "react-icons/lu"
 import { MdInbox, MdOutlineDrafts, MdOutlineKeyboardArrowDown } from "react-icons/md"
 import { TbSend2 } from 'react-icons/tb'
 import { MdOutlineWatchLater } from "react-icons/md";
-import { useDispatch } from 'react-redux'
-import { setOpen } from '../redux/appSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNavItem, setOpen } from '../redux/appSlice'
 
 
 const sidebarItems = [
@@ -35,11 +35,12 @@ const sidebarItems = [
     },
 ]
 const Sidebar = () => {
+    const { selectedNavItem } = useSelector((state) => state.app);
     const dispatch = useDispatch();
     return (
         <div className='w-[15%]'>
             <div className='p-3'>
-                <button onClick={()=> dispatch(setOpen(true))} className='flex items-center gap-2 bg-[#C2E7FE] p-4 rounded-2xl hover:shadow'>
+                <button onClick={() => dispatch(setOpen(true))} className='flex items-center gap-2 bg-[#C2E7FE] p-4 rounded-2xl hover:shadow'>
                     <LuPencil size={"24px"} />
                     Compose
                 </button>
@@ -48,7 +49,12 @@ const Sidebar = () => {
                 {
                     sidebarItems.map((item, index) => {
                         return (
-                            <div className='flex items-center pl-6 py-1 rounded-r-full gap-4 my-2 hover:cursor-pointer hover:bg-gray-200'>
+                            <div
+                                key={index}
+                                onClick={() => dispatch(setNavItem(item.text))}
+                                className='flex items-center pl-6 py-1 rounded-r-full gap-4 my-2 hover:cursor-pointer hover:bg-gray-200'
+                                style={{ backgroundColor: selectedNavItem === item.text ? "lightgray" : "inherit" }}
+                            >
                                 {item.icon}
                                 <p>{item.text}</p>
                             </div>

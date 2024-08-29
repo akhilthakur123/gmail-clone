@@ -1,4 +1,5 @@
 import { Email } from "../models/email.model.js";
+import { User } from "../models/user.model.js";
 
 export const createEmail = async (req, res) => {
     try {
@@ -37,14 +38,26 @@ export const deleteEmail = async (req,res) => {
     }
 }
 
-export const getAllEmailById = async (req,res)=>{
+export const getAllEmailById = async (req, res) => {
     try {
         const userId = req.id;
-        
-        const emails = await Email.find({userId});
-
-        return res.status(200).json({emails});
+        const user = await User.findById(userId);
+        if (!user) return res.status(400).json({ error: "User not found!" });
+        const emails = await Email.find({ to: user.email });
+        return res.status(200).json({ emails });
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const getAllSentEmails = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId);
+        if (!user) return res.status(400).json({ error: "User not found!" });
+        const emails = await Email.find({ userId });
+        return res.status(200).json({ emails });
+    } catch (err) {
+        return res.status(500).json(err)
     }
 }

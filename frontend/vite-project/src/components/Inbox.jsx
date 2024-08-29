@@ -7,6 +7,9 @@ import { GoTag } from "react-icons/go";
 import { FaUserFriends } from "react-icons/fa";
 import { useState } from 'react';
 import Emails from './Emails';
+import { useSelector } from 'react-redux';
+import useGetAllEmails from '../hooks/useGetAllEmails';
+import useGetAllSentEmails from '../hooks/useGetAllSentEmails';
 const mailType = [
     {
         icon: <MdInbox size={'20px'} />,
@@ -24,8 +27,9 @@ const mailType = [
 
 const Inbox = () => {
     const [selected, setSelected] = useState(0);
-
-
+    const { selectedNavItem } = useSelector((state) => state.app);
+    useGetAllEmails();
+    useGetAllSentEmails();
 
     return (
         <div className='flex-1 bg-white rounded-xl mx-5'>
@@ -54,9 +58,9 @@ const Inbox = () => {
                     {
                         mailType.map((item, index) => {
                             return (
-                                <button onClick={ ()=>setSelected (index) }
-                                className={` ${selected == index ? "border-b-4 border-b-blue-600 text-blue-600"
-                                    : "border-b-4 border-b-transparent"}
+                                <button onClick={() => setSelected(index)}
+                                    className={` ${selected == index ? "border-b-4 border-b-blue-600 text-blue-600"
+                                        : "border-b-4 border-b-transparent"}
                                     flex items-center gap-5 p-4 w-52
                                   hover:bg-gray-100`}>
                                     {item.icon}
@@ -67,7 +71,8 @@ const Inbox = () => {
                     }
 
                 </div>
-                <Emails/>
+                {selectedNavItem === "Inbox" && <Emails type="inbox" />}
+                {selectedNavItem === "Sent" && <Emails type="sent" />}
             </div>
         </div>
     )
